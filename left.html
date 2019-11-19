@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		  <meta name="renderer" content="webkit">
+		  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		  <link rel="stylesheet" href="css/layui.css"  media="all">
+
+	</head>
+		<script src="js/layui.js"></script>
+	<body>
+
+<div class="layui-tab">
+  <ul class="layui-tab-title">
+    <li class="layui-this">网站设置</li>
+    <li>用户管理</li>
+    <li>权限分配</li>
+    <li>商品管理</li>
+    <li>订单管理</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">内容1</div>
+    <div class="layui-tab-item">内容2</div>
+    <div class="layui-tab-item">内容3</div>
+    <div class="layui-tab-item">内容4</div>
+    <div class="layui-tab-item">内容5</div>
+  </div>
+</div>
+ 
+<script>
+//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+
+layui.use('element', function(){
+  var element = layui.element;
+  
+  //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+  var layid = location.hash.replace(/^#test1=/, '');
+  element.tabChange('test1', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
+  
+  //监听Tab切换，以改变地址hash值
+  element.on('tab(test1)', function(){
+    location.hash = 'test1='+ this.getAttribute('lay-id');
+  });
+});
+
+</script>
+
+	</body>
+</html>

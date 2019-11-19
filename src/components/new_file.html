@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <link rel="stylesheet" href="https://unpkg.com/form-making/dist/FormMaking.css">
+</head>
+<body>
+  <div id="app">
+    <fm-generate-form 
+      :data="jsonData" 
+      :remote="remoteFuncs" 
+      :value="editData" 
+      ref="generateForm"
+    >
+    </fm-generate-form>
+    <el-button type="primary" @click="handleSubmit">提交</el-button>
+  </div>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://unpkg.com/form-making/dist/FormMaking.umd.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        jsonData: {"list":[{"type":"grid","icon":"icon-RectangleCopy","columns":[{"span":12,"list":[]},{"span":12,"list":[]}],"options":{"gutter":0,"justify":"start","align":"top","customClass":"","hidden":false,"remoteFunc":"func_1573107786500"},"name":"栅格布局","key":"1573107786500","model":"grid_1573107786500","rules":[]},{"type":"grid","icon":"icon-RectangleCopy","columns":[{"span":12,"list":[]},{"span":12,"list":[]}],"options":{"gutter":0,"justify":"start","align":"top","customClass":"","hidden":false,"remoteFunc":"func_1573107789452"},"name":"栅格布局","key":"1573107789452","model":"grid_1573107789452","rules":[]},{"type":"grid","icon":"icon-RectangleCopy","columns":[{"span":12,"list":[]},{"span":12,"list":[]}],"options":{"gutter":0,"justify":"start","align":"top","customClass":"","hidden":false,"remoteFunc":"func_1573107789946"},"name":"栅格布局","key":"1573107789946","model":"grid_1573107789946","rules":[]},{"type":"grid","icon":"icon-RectangleCopy","columns":[{"span":12,"list":[]},{"span":12,"list":[]}],"options":{"gutter":0,"justify":"start","align":"top","customClass":"","hidden":false,"remoteFunc":"func_1573107790474"},"name":"栅格布局","key":"1573107790474","model":"grid_1573107790474","rules":[]}],"config":{"labelWidth":100,"labelPosition":"right","size":"small","customClass":""}},
+        editData: {},
+        remoteFuncs: {
+          
+        }
+      },
+      methods: {
+        handleSubmit () {
+          this.$refs.generateForm.getData().then(data => {
+            // 数据校验成功
+            // data 为获取的表单数据
+            alert(JSON.stringify(data))
+          }).catch(e => {
+            // 数据校验失败
+          })
+        }
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+ <!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>欢迎页面-X-admin2.2</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <link rel="stylesheet" type="text/css" href="css/pagination.css"/>
+        <link rel="stylesheet" type="text/css" href="css/loading.css"/>
+        <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <script src="js/url.js" type="text/javascript" charset="utf-8"></script>
+        <!-- 分页插件-->
+        <script src="js/jquery.pagination.js" type="text/javascript" charset="utf-8"></script>
+        <!-- 时间戳转日期-->
+        <script src="js/filter.js" type="text/javascript" charset="utf-8"></script>
+
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+       <style type="text/css">
+       		table td{  max-width:500px;  Word-wrap: break-word;  text-overflow:ellipsis;  white-space:nowrap;  overflow:hidden;  } table td:hover{  white-space:normal;  overflow:auto; }
+       		.ctltable{border-collapse: collapse; table-layout:fixed} .ctltable td { text-overflow:ellipsis; overflow:hidden; white-space: nowrap; }
+       </style>
+    </head>
+    <body>
+        <div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite></a>
+          </span>
+          <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+        </div>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <form class="layui-form layui-col-space5">
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input class="layui-input stratData"  autocomplete="off" placeholder="开始日" name="start" id="start">
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input class="layui-input endData"  autocomplete="off" placeholder="截止日" name="end" id="end">
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <select name="contrller" class="change">
+                                        <option value="0">请选择</option>
+                                        <option value="1">待审批</option>
+                                        <option value="2">审批通过</option>
+                                        <option value="3">审批未通过</option></select>
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input class="layui-btn" onclick="findAll()" type="button" value="查询">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-card-header">
+                            <button class="layui-btn" onclick="xadmin.open('上报','./member-add.html',400,400)"><i class="layui-icon"></i>上报</button>
+                        	<button class="layui-btn layui-btn-normal" onclick="xadmin.open('存档','./member-cd.html',800,400)"><i class="layui-icon">&#xe63c;</i>存档</button>
+                        </div>
+                        <div class="layui-card-body layui-table-body layui-table-main">
+                            <table class="layui-table layui-form ctltable">
+                                <thead>
+                                  <tr>
+                                  	<th style='display: none;'>序号</th>
+                                    <th>标题</th>
+                                    <th>养护单位</th>
+                                    <th>上报时间</th>
+                                    <th>处理状态</th>
+                                    <th>不通过原因</th>
+                                    <th>审核次数</th>
+                                    <th>查看附件</th>
+                                    <th>修改/删除</th>
+                                    <th>通过/不通过</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="container" >
+                                  <!--<tr>
+                                    <td>1</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>13000000000</td>
+                                    <td>北京市 海淀区</td>
+                                    <td class="td-status">
+                                      <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td>
+                                    <td>13000000000</td>
+                                    <td class="td-manage">
+                                    
+                                      <a title="编辑"  onclick="xadmin.open('编辑','member-edit.html',600,400)" href="javascript:;">
+                                        <i class="layui-icon">&#xe642;</i>
+                                      </a>
+                                      <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                        <i class="layui-icon">&#xe640;</i>
+                                      </a>
+                                    </td>
+                                  </tr>-->
+                                 
+                                </tbody>
+                            </table>
+                            <div class="loading">
+								<p><i class='layui-icon'>&#xe63d;</i> 正在加载......</p>
+							</div>
+							<!--编辑-->
+	                        <div class="layui-card-body" style="display: none;" id="edit">
+	                            <form class="layui-form ">
+	                            	<div class="layui-form-item">
+									    <label class="layui-form-label">年份/月份</label>
+									    <div class="layui-input-block">
+									      <input type="text" name="title" class="layui-input" id="month" style="width: 80%;">
+									    </div>
+									</div>
+	                                <div class="layui-form-item">
+									    <label class="layui-form-label">标题</label>
+									    <div class="layui-input-block">
+									      <input type="text" name="title" class="layui-input" id="titles" style="width: 80%;">
+									    </div>
+									</div>
+									<input type="text" name="mid" id="mid" style="display: none;" value="" />
+									<div style="text-align: center;margin-bottom: 25px;">
+										<input type="file" name="files" id="files" lay-verify="files"/>
+									</div>
+	                                <div class="layui-form-item">
+									    <div class="layui-input-block">
+									      <input type="button" class="layui-btn" lay-submit=""  value="确认修改" onclick="edit()"/>
+				
+									    </div>
+									</div>
+	                            </form>
+                            </div>
+                        </div>
+                        <div class="layui-card-body " style="overflow: hidden;">
+                            <div class="M-box1" style="float: left;"></div> 
+                            <p style="float: right; padding:4px 0 0 10px; font-size: 14px; color: #808080;font-weight: bold;">
+                            	共<input type="text" id="page" class="put" value="" />页
+                            	共<input type="text" id="rows" class="put" value="" />条数据
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </body>
+    <script>
+      layui.use(['laydate','form'], function(){
+        var laydate = layui.laydate;
+        var form = layui.form;
+        // 监听全选
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+    
+		//年月范围选择
+		laydate.render({ 
+		  elem: '#month',
+		  type: 'month',
+		});
+		 //自定义验证规则
+        form.verify({
+            files: function(value) {
+                if (value.length == '' ) {
+                    return '请选择上传的文件';
+                }
+            }
+        }); 
+      });
+      
+     $(function(){
+     	 findAll()
+     })
+     
+    function findAll(){
+     	$('#container').html('');
+     	var startData = $('.stratData').val();
+    	var endData = $('.endData').val();
+    	var rtype = $('.change').val();
+    	if($('.stratData').val()=='' && $('.endData').val()== '' && $('.change').val()== '0'){
+    		startData = null;
+    		endData = null;
+    		rtype = null;
+    		ajaxAll(startData,endData,rtype);
+    	}else if($('.stratData').val()=='' || $('.endData').val()== ''){
+    		alert("请输入内容");
+    	}else{
+    		ajaxAll(startData,endData,rtype);
+    	}
+     }
+     
+    function ajaxAll(startData,endData,rtype){
+    	$('.loading').show();
+    	$.ajax({
+	        type: "post",
+	        dataType: "json",
+	        url: baseUrl+'/newlvdiReportController.do?findbyLvdimisson',
+	        data: {
+				startDate:startData,
+				endData:endData,
+				rtype:rtype,
+				page:'1',
+				row:5
+	        }, 
+	        beforeSend: function (request) {     //携带token  
+                request.setRequestHeader("token", sessionStorage.getItem('token'));
+           },
+	        success: function (data) {
+	        	console.log(data)
+	        	var zPage = Math.ceil(data.total/data.map.length);
+	        	$('#page').val(zPage);
+	        	$('#rows').val(data.total)
+	        	if(data){
+	        		$('.loading').hide();
+	        		var cont = '';
+	        		var num = 1;
+	        		for(var i=0;i<data.map.length;i++){
+	        			if(data.map[i][4]=='1'){
+	        				data.map[i][4]='待审批'
+	        			}else if(data.map[i][4]=='2'){
+	        				data.map[i][4]='审核通过'
+	        			}else if(data.map[i][4]=='3'){
+	        				data.map[i][4]='审核不通过'
+	        			}
+	        		 	$('#container').append("<tr>"+
+	        		 			"<td style='display: none;'>"+ data.map[i][0] +"</td>"+
+    		 					"<td>"+data.map[i][1]+"</td>"+
+    		 					"<td>"+ data.map[i][2]+"</td>"+
+    		 					"<td>"+ timestampToTime(data.map[i][3])+"</td>"+
+    		 					"<td>"+ data.map[i][4]+"</td>"+
+    		 					"<td>"+ data.map[i][6]+"</td>"+
+    		 					"<td>"+data.map[i][7]+"</td>"+
+    		 					"<td>"+ 
+    		 						" <a title='下载' href='"+data.map[i][5]+"'>"+
+	                                "<i class='layui-icon'>&#xe601;</i>"+
+	                              "</a>"+
+    		 					"</td>"+
+    		 					"<td class='td-manage'>"+
+	                              "<a title='编辑' onclick='member_edit(this,"+data.map[i][0]+")'   href='javascript:;'>"+
+	                                "<i class='layui-icon'>&#xe642;</i>"+
+	                              "</a>"+
+	                             " <a title='删除' onclick='member_del(this,"+data.map[i][0]+")'  href='javascript:;'>"+
+	                                "<i class='layui-icon'>&#xe640;</i>"+
+	                              "</a>"+
+	                            "</td>"+
+	                            "<td class='td-manage'>"+
+	                               "<button style='margin-right: 6px;padding: 3px 4px;background: green; color: #fff; border: none;' onclick='member_Pass(this,"+data.map[i][0]+")'>通过</button>"+
+                            	   "<button style='padding: 3px 4px;background: red; color: #fff; border: none;' onclick='member_noPass(this,"+data.map[i][0]+")'>不通过</button>"+
+	                            "</td>"+
+	    		 				"</tr>");
+	
+					}
+
+	        	}
+	            console.log("这是请求成功的");
+	            //分页插件
+	            $('.M-box1').pagination({
+                    pageCount: zPage,  
+                    coping:true,                //是否开启首页和末页
+                    homePage:'首页',
+                    endPage:'末页',
+                    prevContent:'上页',
+                    nextContent:'下页',
+                    current:1,                    //当前页码
+                    callback:function (api) {     //这是一个回调函数
+ 						$('.loading').show();
+ 						$.ajax({
+					        type: "post",
+					        dataType: "json",
+					        url: baseUrl+'/newlvdiReportController.do?findbyLvdimisson',
+					        data: {
+								startDate:startData,
+								endData:endData,
+								rtype:rtype,
+								page:api.getCurrent(),
+								row:5
+					        }, 
+					        beforeSend: function (request) {      
+				                request.setRequestHeader("token", sessionStorage.getItem('token'));
+				            },
+					        success: function (data) {
+					        	console.log(data)
+					        	$('#container').html('');
+					        	if(data){
+					        		$('.loading').hide();
+					        		var cont = '';
+					        		var num = 1;
+					        		for(var i=0;i<data.map.length;i++){
+					        			if(data.map[i][4]=='1'){
+					        				data.map[i][4]='待审批'
+					        			}else if(data.map[i][4]=='2'){
+					        				data.map[i][4]='审核通过'
+					        			}else if(data.map[i][4]=='3'){
+					        				data.map[i][4]='审核不通过'
+					        			}
+					        			console.log(data.map.length)
+					        		 	$('#container').append("<tr>"+
+					        		 			"<td style='display: none;'>"+ data.map[i][0] +"</td>"+
+				    		 					"<td>"+data.map[i][1]+"</td>"+
+				    		 					"<td>"+ data.map[i][2]+"</td>"+
+				    		 					"<td>"+ timestampToTime(data.map[i][3])+"</td>"+
+				    		 					"<td>"+ data.map[i][4]+"</td>"+
+				    		 					"<td>"+ data.map[i][6]+"</td>"+
+				    		 					"<td>"+data.map[i][7]+"</td>"+
+				    		 					"<td>"+ 
+				    		 						" <a title='删除' href='"+data.map[i][5]+"'>"+
+					                                "<i class='layui-icon'>&#xe601;</i>"+
+					                              "</a>"+
+				    		 					"</td>"+
+				    		 					"<td class='td-manage'>"+
+					                              "<a title='编辑'    href='javascript:;'>"+
+					                                "<i class='layui-icon'>&#xe642;</i>"+
+					                              "</a>"+
+					                             " <a title='删除' onclick='member_del(this,"+ data.map[i][0]+")'  href='javascript:;'>"+
+					                                "<i class='layui-icon'>&#xe640;</i>"+
+					                              "</a>"+
+					                            "</td>"+
+					                            "<td class='td-manage'>"+
+					                               "<button style='margin-right: 6px;padding: 3px 4px;background: green; color: #fff; border: none;' onclick='member_Pass(this,"+data.map[i][0]+")'>通过</button>"+
+				                            	   "<button style='padding: 3px 4px;background: red; color: #fff; border: none;' onclick='member_noPass(this,"+data.map[i][0]+")'>不通过</button>"+
+					                            "</td>"+
+					    		 				"</tr>");
+					    		 				
+									}
+//					        		$('#container').html(cont);
+					        	}
+					            console.log("这是请求成功的");
+	
+					        },
+					        error:function (err) {
+				//	        	Toast('账号或密码错误',2000)
+					            console.log("这是请求失败的");
+					        }
+					    });
+                    }
+                });
+
+	        },
+	        error:function (err) {
+//	        	Toast('账号或密码错误',2000)
+	            console.log("这是请求失败的");
+	        }
+	     });
+	    }
+
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(){
+			$.ajax({
+				type: "post" ,
+				dataType:'json',
+				url: baseUrl+"/GreenController.do?delete2" ,
+				cache : false,
+  			    async : false,
+				data: {
+					 id:id,
+					 table : "mouthPlan"
+				} ,
+				success:function(data){
+					console.log(data)
+					if(data == 1){
+						$(obj).parents("tr").remove();
+//						location.reload();
+						layer.msg('已删除!',{icon:1,time:1000});
+						findAll()
+					}else{
+						layer.msg("删除失败");
+					}
+				}
+			})
+        });
+    }
+	/*用户-编辑弹窗*/
+	function member_edit(obj,id){
+		$('#month').val($(obj).parent().parent().find("td:eq(4)").text());
+		$('#titles').val($(obj).parent().parent().find("td:eq(1)").text());
+		$('#mid').val($(obj).parent().parent().find("td:eq(0)").text())
+		layer.open({
+		  title:'月计划上报',
+		  area: ['360px', '360px'],
+		  type: 1,
+		  content: $('#edit')
+		});
+	}
+	/*编辑提交*/
+	function edit(){
+		var yearM = $('#month').val();
+		var str = yearM.split('-');
+		console.log(yearM,str,$('#mid').val(),$('#titles').val());
+		console.log($('#files')[0].files[0])
+		var formData = new FormData(); 
+		formData.append('mname',$('#titles').val())
+		formData.append('mid',$('#mid').val())
+		formData.append('month',str[1])
+		formData.append('year',str[0])
+		formData.append('file',$('#files')[0].files[0])
+		$.ajax({
+			type: "post" ,
+			dataType:'json',
+			url: baseUrl+'/lvdiReportController.do?uploadfiles' ,
+			data: formData,
+			processData:false,
+            contentType:false,
+			success:function(data){
+				console.log(data)
+//					if(data == 1){
+////						location.reload();
+//						$(obj).parents("tr").remove();
+//						layer.msg('已删除!',{icon:1,time:1000});
+//					}else{
+//						layer.msg("删除失败");
+//					}
+			}
+		})
+	}
+	/*用户-通过*/
+    function member_Pass(obj,id){
+        layer.confirm('确认要通过吗？',function(){
+			$.ajax({
+				type: "post" ,
+				dataType:'json',
+				url: baseUrl+"/lvdiReportController.do?shenHe" ,
+				cache : false,
+  			    async : false,
+				data: {
+					 id:id,
+					 status:2
+				} ,
+				success:function(data){
+					console.log(data)
+					if(data == 1){
+						$(obj).parents("tr").remove();
+						layer.msg('审核已通过!',{icon:1,time:1000});
+						findAll()
+					}else{
+						layer.msg("审核通过失败");
+					}
+				}
+			})
+        });
+    }
+   	/*用户-通过*/
+    function member_noPass(obj,id){
+        layer.confirm(`原因:<input type="text" id='shreason'>`,function(){
+			$.ajax({
+				type: "post" ,
+				dataType:'json',
+				url: baseUrl+"/lvdiReportController.do?shenbutong" ,
+				cache : false,
+  			    async : false,
+				data: {
+					 shid:id,
+					 shreason:$('#shreason').val()	
+				} ,
+				success:function(data){
+					console.log(data)
+					if(data == 1){
+						$(obj).parents("tr").remove();
+						layer.msg('审核不通过!',{icon:1,time:1000});
+						findAll()
+					}else{
+						layer.msg("审核不通过失败");
+					}
+				}
+			})
+        });
+    }
+    </script>
+</html>

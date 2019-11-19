@@ -1,0 +1,72 @@
+<!doctype html>
+<html  class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title>淮安绿地网格系统</title>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/login.css">
+	<link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script src="js/url.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/Toast.js" type="text/javascript" charset="utf-8"></script>
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="login-bg">
+    <div class="login layui-anim layui-anim-up">
+        <div class="message">x-admin2.0-管理登录</div>
+        <div id="darkbannerwrap"></div>
+        
+        <form method="post" class="layui-form" >
+            <input name="name" placeholder="用户名"  type="text" lay-verify="required" class="layui-input user">
+            <hr class="hr15">
+            <input name="pwd" lay-verify="required" placeholder="密码"  type="password" class="layui-input pass">
+            <hr class="hr15">
+            <input value="登录" onclick="login()" lay-submit lay-filter="login" style="width:100%;" type="button">
+            <hr class="hr20" >
+        </form>
+    </div>
+
+    <script>
+    	function login(){
+    	 $.ajax({
+	        type: "post",
+	        dataType: "json",
+	        url: baseUrl+'/AndroidController.do?userLogin',
+	        data: {
+	        	name:$('.user').val(),
+	        	pwd:$('.pass').val(),
+	        	flag:'435120'
+	        },
+	        success: function (data,status,xhr) {
+				// console.log(xhr);
+				console.log(xhr.getAllResponseHeaders())
+	        	console.log(xhr.getResponseHeader("token"));
+	        	console.log(data,status)
+	        	if(data){ 
+	        		sessionStorage.setItem("userID",data.id);
+                    sessionStorage.setItem("groupId",data.groupid);
+                    sessionStorage.setItem('user',$('.user').val());
+                    sessionStorage.setItem('token',xhr.getResponseHeader("token"))
+	        		location.href='index.html'
+	        	}
+	            console.log("这是请求成功的");
+	        },
+	        error:function (err) {
+	        	Toast('账号或密码错误',2000)
+	            console.log("这是请求失败的");
+	        }
+	     });
+	    }      
+    </script>
+    <!-- 底部结束 -->
+  
+</body>
+</html>
